@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Taker Info</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="firebase-config.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    .info-box { border: 1px solid #ccc; padding: 1em; border-radius: 8px; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <h2>Quiz Taker Information</h2>
+  <div id="info" class="info-box">Loading...</div>
+  <script>
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+    const id = getIdFromUrl();
+    if (!id) {
+      document.getElementById('info').textContent = 'No ID provided.';
+    } else {
+      firebase.database().ref('quiz-takers/' + id).once('value').then(function(snapshot) {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          document.getElementById('info').innerHTML =
+            `<b>Name:</b> ${data.name || ''}<br>` +
+            `<b>Email:</b> ${data.email || ''}<br>` +
+            `<b>Score:</b> ${data.score || ''}`;
+        } else {
+          document.getElementById('info').textContent = 'No data found for this ID.';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

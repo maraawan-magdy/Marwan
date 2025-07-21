@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coca-Cola HBC Safety Briefing</title>
+  <meta name="theme-color" content="#e4002b">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="quiz-qr.js"></script>
+  <script src="rules-questions.js"></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="Logo1.png" alt="Coca-Cola Logo" class="logo-main">
+      </div>
+      <div class="nav-links">
+        <a href="#welcome" class="nav-link" data-section="welcome">Home</a>
+        <a href="#instructions" class="nav-link" data-section="instructions">Instructions</a>
+
+      </div>
+      <div class="navbar-right">
+        <img src="Logo2.png" alt="Logo Top Right" class="logo-top-right">
+      </div>
+    </nav>
+  </header>
+  <section class="hero" id="welcome">
+    <div class="big-welcome">Welcome to Coca-Cola Hellenic Factory!</div>
+    <div class="highlight-text">
+      We care deeply about your safety. Please take a moment to understand our safety instructions carefully<br>
+      Health and safety test is compulsory for visitors of the Coca-Cola HBC<br>
+      so you can enjoy a safe and pleasant visit to our factory.
+    </div>
+    <button class="btn" onclick="showVisitorForm()">I Confirm</button>
+  </section>
+
+  <main>
+    <div id="visitor-form" class="container hidden">
+        <h2>Visitor Information</h2>
+        <form id="visitorInfo">
+          <label>Full Name:</label><br>
+          <input type="text" name="fullname" required style="width:100%;padding:10px;margin:10px 0;"><br>
+          <label>National ID:</label><br>
+          <input type="text" name="nationalid" required style="width:100%;padding:10px;margin:10px 0;"><br>
+          <label>Email Address:</label><br>
+          <input type="text" name="email" required style="width:100%;padding:10px;margin:10px 0;"><br>
+          <label>Phone Number:</label><br>
+          <input type="text" name="phone" required style="width:100%;padding:10px;margin:10px 0;"><br>
+          <label>Blood Type:</label><br>
+          <select name="bloodtype" required style="width:100%;padding:10px;margin:10px 0;">
+            <option value="">--Select--</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select><br>
+          <button class="btn" type="button" onclick="showInstructions()">Next</button>
+        </form>
+      </div>
+  
+      <div id="instructions" class="container hidden">
+        <h2>Safety Moment</h2>
+        <video controls>
+          <source src="file:///C:\Coca cola/Video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+  
+        <button class="btn" onclick="startRulesQuestions()">Next</button>
+      </div>
+  
+  <div id="rule-section" style="display:none;">
+  <!-- Rule 1 -->
+  <div class="rule-page" id="rule1" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <img src="Picture1.png" alt="Rules for visitors" class="rule-image" style="max-width:180vw; max-height:90vh; object-fit:contain;">
+    <h2 class="rule-heading">Read visitors rules well.</h2>
+    <p class="rule-text">I declare that I have learnt all Rules of visitors.</p>
+    <button class="btn" onclick="nextPage()">I confirm</button>
+  </div>
+  <!-- Question 1 -->
+  <div class="question-page" id="question1" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <h2 class="question-heading">Question 1</h2>
+    <img src="q1.jpg" alt="Helmet Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <p class="question-text">Why is a safety induction required for visitors before entering the factory?</p>
+    <form>
+      <input type="radio" name="q1" value="a"> To reduce time spent during the factory tour<br>
+      <input type="radio" name="q1" value="b"> To ensure visitors understand safety rules and how to act in case of an emergency<br>
+      <input type="radio" name="q1" value="c"> To assign visitors a job role in the production area<br>
+    </form>
+    <button class="btn" onclick="checkAnswer(1, 'b')">Check Answer</button>
+    <span class="try-again" id="try-again-1" style="color:red; display:none;">Try again</span>
+  </div>
+  <!-- Rule 2 -->
+  <div class="rule-page" id="rule2" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <img src="Picture3.png" alt="Traffic Routes" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <h2 class="rule-heading">Traffic Routes</h2>
+    <p class="rule-text">Stick with walkways which marked on the floor by yellow color especially in Forklift working areas.</p>
+    <button class="btn" onclick="nextPage()">I confirm</button>
+  </div>
+  <!-- Question 2 -->
+  <div class="question-page" id="question2" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <h2 class="question-heading">Question 2</h2>
+    <img src="q2.jpg" alt="Vest Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <p class="question-text">Where should visitors walk inside the factory, especially in forklift zones?</p>
+    <form>
+      <input type="radio" name="q2" value="a"> Only along marked yellow walkways<br>
+      <input type="radio" name="q2" value="b"> Anywhere that looks clear<br>
+      <input type="radio" name="q2" value="c"> Next to forklifts so operators can see them<br>
+    </form>
+    <button class="btn" onclick="checkAnswer(2, 'a')">Check Answer</button>
+    <span class="try-again" id="try-again-2" style="color:red; display:none;">Try again</span>
+  </div>
+  <!-- Rule 3 -->
+  <div class="rule-page" id="rule3" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <img src="Picture4.png" alt="Smoking Policy" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <h2 class="rule-heading">Smoking Policy</h2>
+    <p class="rule-text">Smoking is not allowed, except in designated smoking areas.</p>
+    <button class="btn" onclick="nextPage()">I confirm</button>
+  </div>
+  <!-- Question 3 -->
+  <div class="question-page" id="question3" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <h2 class="question-heading">Question 3</h2>
+    <img src="q3.jpg" alt="Shoes Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <p class="question-text">When is it allowed for visitors to use a mobile phone inside the factory</p>
+    <form>
+      <input type="radio" name="q3" value="a"> Anytime, as long as you are standing stil<br>
+      <input type="radio" name="q3" value="b"> Only in safe zones — never in the yard, finished goods, or forklift zones<br>
+      <input type="radio" name="q3" value="c"> Never<br>
+    </form>
+    <button class="btn" onclick="checkAnswer(3, 'b')">Check Answer</button>
+    <span class="try-again" id="try-again-3" style="color:red; display:none;">Try again</span>
+  </div>
+  <!-- Rule 4 -->
+  <div class="rule-page" id="rule4" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <img src="Picture5.png" alt="Emergency Situations" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <h2 class="rule-heading">Emergency Situations</h2>
+    <p class="rule-text">In case of Emergencies<br>
+        Stay calm, do not panic.<br>
+        Look after  the emergency exist sign.<br>
+        Guidance will lead you to the assembly point <br>
+        </p>
+    <button class="btn" onclick="nextPage()">I confirm</button>
+  </div>
+  <!-- Question 4 -->
+  <div class="question-page" id="question4" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+    <h2 class="question-heading">Question 4</h2>
+    <img src="q4.jpg" alt="Phones Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+    <p class="question-text">What should you do if you hear the fire alarm during your visit?</p>
+    <form>
+      <input type="radio" name="q4" value="a"> Follow your host and evacuate immediately via the nearest emergency exit <br>
+      <input type="radio" name="q4" value="b"> Wait for a supervisor to tell you what to do<br>
+      <input type="radio" name="q4" value="c"> Ask another visitor what to do and stay where you are<br>
+    </form>
+    <button class="btn" onclick="checkAnswer(4, 'a')">Check Answer</button>
+    <span class="try-again" id="try-again-4" style="color:red; display:none;">Try again</span>
+  </div>
+
+
+    
+    <!-- Rule 5 -->
+    <div class="rule-page" id="rule5" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="Picture8.jpg" alt="Evacuation Layout" class="rule-image" style="max-width:120vw; max-height:60vh; object-fit:contain;">
+      <h2 class="rule-heading">Evacuation Layout</h2> 
+        <p><span style="background-color: red;">High Care Area</span><br>
+        <p><span style="background-color: yellow;">Medium Care Area</span><br>
+        <p><span style="background-color: green;">Medium Care Area</span><br>
+        .</p>
+        <button class="btn" onclick="nextPage()">I confirm</button>
+    </div>
+    <!-- Question 5 -->
+    <div class="question-page" id="question5" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+        <h2 class="question-heading">Question 5</h2>
+        <img src="smoking.png" alt="Walkways Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+        <p class="question-text">Is smoking in facility allowed?</p>
+        <form>
+          <input type="radio" name="q5" value="a"> Smoking is allowed only in designated places<br>
+          <input type="radio" name="q5" value="b"> Smoking is strictly prohibited<br>
+          <input type="radio" name="q5" value="c"> Smoking is allowed during breaks anywhere on site<br>
+        </form>
+        <button class="btn" onclick="checkAnswer(5, 'a')">Check Answer</button>
+        <span class="try-again" id="try-again-5" style="color:red; display:none;">Try again</span>
+      </div>
+    <!-- Rule 6 -->
+    <div class="rule-page" id="rule6" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="r6.jpg" alt="Follow Signage" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <h2 class="rule-heading">Follow All Signage</h2>
+      <p class="rule-text">Always follow the posted signs for safety instructions.</p>
+      <button class="btn" onclick="nextPage()">I confirm</button>
+    </div>
+    <!-- Question 6 -->
+    <div class="question-page" id="question6" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <h2 class="question-heading">Question 6</h2>
+      <img src="signage.jpg" alt="Signage Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <p class="question-text">What should you always follow for safety?</p>
+      <form>
+        <input type="radio" name="q6" value="a"> Your own rules<br>
+        <input type="radio" name="q6" value="b"> Posted signage<br>
+        <input type="radio" name="q6" value="c"> Other visitors<br>
+      </form>
+      <button class="btn" onclick="checkAnswer(6, 'b')">Check Answer</button>
+      <span class="try-again" id="try-again-6" style="color:red; display:none;">Try again</span>
+    </div>
+    <!-- Rule 7 -->
+    <div class="rule-page" id="rule7" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="r7.jpg" alt="Emergency Exits" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <h2 class="rule-heading">Know Emergency Exits</h2>
+      <p class="rule-text">Be aware of all emergency exits and evacuation routes.</p>
+      <button class="btn" onclick="nextPage()">I confirm</button>
+    </div>
+    <!-- Question 7 -->
+    <div class="question-page" id="question7" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <h2 class="question-heading">Question 7</h2>
+      <img src="exit.jpg" alt="Exits Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <p class="question-text">What should you know in case of emergency?</p>
+      <form>
+        <input type="radio" name="q7" value="a"> Where the cafeteria is<br>
+        <input type="radio" name="q7" value="b"> Emergency exits<br>
+        <input type="radio" name="q7" value="c"> The manager's office<br>
+      </form>
+      <button class="btn" onclick="checkAnswer(7, 'b')">Check Answer</button>
+      <span class="try-again" id="try-again-7" style="color:red; display:none;">Try again</span>
+    </div>
+    <!-- Rule 8 -->
+    <div class="rule-page" id="rule8" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="r8.jpg" alt="Report Hazards" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <h2 class="rule-heading">Report Hazards</h2>
+      <p class="rule-text">Immediately report any hazards or unsafe conditions.</p>
+      <button class="btn" onclick="nextPage()">I confirm</button>
+    </div>
+    <!-- Question 8 -->
+    <div class="question-page" id="question8" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <h2 class="question-heading">Question 8</h2>
+      <img src="hazard.png" alt="Hazard Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <p class="question-text">What should you do if you see a hazard?</p>
+      <form>
+        <input type="radio" name="q8" value="a"> Ignore it<br>
+        <input type="radio" name="q8" value="b"> Report it<br>
+        <input type="radio" name="q8" value="c"> Wait for someone else<br>
+      </form>
+      <button class="btn" onclick="checkAnswer(8, 'b')">Check Answer</button>
+      <span class="try-again" id="try-again-8" style="color:red; display:none;">Try again</span>
+    </div>
+    <!-- Rule 9 -->
+    <div class="rule-page" id="rule9" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="r99.jpg" alt="Use PPE" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <h2 class="rule-heading">Use PPE</h2>
+      <p class="rule-text">Personal protective equipment must be used as required.</p>
+      <button class="btn" onclick="nextPage()">I confirm</button>
+    </div>
+    <!-- Question 9 -->
+    <div class="question-page" id="question9" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <h2 class="question-heading">Persnonal Protective Equipment</h2>
+      <img src="PPE.jpg" alt="PPE Question" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <p class="question-text">Mandatory PPEs are Safety shoes, High visibility vest.<br>
+        <form>
+          <input type="radio" name="q9" value="a"> Safety shoes<br>
+          <input type="radio" name="q9" value="b"> High visibility vest<br>
+          <input type="radio" name="q9" value="c"> Wait for someone else<br>
+        </form>
+        <button class="btn" onclick="checkAnswer(9, 'b')">Check Answer</button>
+        <span class="try-again" id="try-again-9" style="color:red; display:none;">Try again</span>
+    </div>
+    <!-- Rule 10 -->
+    <div class="rule-page" id="rule10" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+      <img src="visitor.jpg" alt="Ask for Help" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+      <h2 class="rule-heading">Attach the "Guest/Visitor" pass to your colthes in a visible place.</h2>
+      <p class="rule-text">I undertake to wear my ID in a visible place and to show it at the request of the employees of the organization.<br>
+      <button class="btn" onclick="nextPage()">I confirm</button><br>
+    </div>
+   <!-- Question 10 -->
+<div class="question-page" id="question10" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+  <h2 class="question-heading">Question 10</h2>
+  <img src="q10.jpg" alt="Question 10" class="rule-image" style="max-width:80vw; max-height:40vh; object-fit:contain;">
+  <p class="question-text">What should you do with your visitor ID during the tour inside the facility?</p>
+  <form>
+    <input type="radio" name="q10" value="a"> Attach it visibly to your clothing at all times during the tour<br>
+    <input type="radio" name="q10" value="b"> Keep it in your bag and show it only when asked<br>
+    <input type="radio" name="q10" value="c"> Give it to your host and don’t worry about it<br>
+  </form>
+  <button class="btn" onclick="checkAnswer(10, 'a')">Check Answer</button>
+  <span class="try-again" id="try-again-10" style="color:red; display:none;">Try again</span>
+</div>
+<!-- Rule 11 (QR Page) -->
+<div class="rule-page" id="rule11" style="display:none; flex-direction:column; align-items:center; justify-content:center; min-height:80vh;">
+  <h2>Thank you for completing the Safety Briefing!</h2>
+  <p>Your QR code is below. Please show this at the entrance.</p>
+  <img src="QR.jpg" alt="QR Code Icon" style="max-width:140px; margin-bottom:40px;">
+  <button class="btn" onclick="downloadQRCode()">Download QR Code</button>
+</div>
+
+
+    <div id="thankyou-section" class="container hidden" style="text-align:center;">
+  <h2>Thank you for completing the Safety Briefing!</h2>
+  <p>Your QR code is below. Please show this at the entrance.</p>
+  <img src="qr_icon.png" alt="QR Code Icon" style="max-width:120px; margin-bottom:20px;">
+  <div><canvas id="thankyou-qr-canvas"></canvas></div>
+  <button class="btn" onclick="downloadQRCode()">Download QR Code</button>
+</div>
+
+
+    <div id="instructions" class="container hidden">
+      <h2>Safety Moment</h2>
+      <video controls>
+        <source src="file:///C:\Coca cola/Video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <button class="btn" onclick="showPage(4)">Next</button>
+    </div>
+
+    <!-- Removed old quiz form. Rule/question sequence will be shown by JS after this section. -->
+
+         
+
+    <div id="result" class="container hidden">
+      <h2>Access Granted</h2>
+      <p>You passed the quiz. Please present this QR code to security:</p>
+      <div id="qrcode"><canvas id="qrcanvas"></canvas></div>
+    </div>
+
+    <div id="fail" class="container hidden">
+      <h2>Access Denied</h2>
+      <p>You did not pass the quiz. Please review the safety instructions again.</p>
+      <button class="btn" onclick="showInstructions()">Retry</button>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Coca-Cola HBC Egypt. All rights reserved. | Safety First
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coca-Cola HBC Safety Briefing</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    .hidden { display: none; }
+    .question { margin-bottom: 20px; }
+    .btn { padding: 10px 20px; margin: 10px; background: #e4002b; color: white; border: none; cursor: pointer; }
+    .btn:hover { background: #c20025; }
+    .container { max-width: 600px; margin: auto; }
+  </style>
+</head>
+<body>
+  <div id="welcome" class="container">
+    <h1>Welcome to Coca-Cola HBC Egypt</h1>
+    <p>Please read our safety instructions before entering the factory.</p>
+    <button class="btn" onclick="showInstructions()">Start Safety Briefing</button>
+  </div>
+
+  <div id="instructions" class="container hidden">
+    <h2>Safety Instructions</h2>
+    <ul style="text-align:left;">
+      <li>Wear helmet, vest, and safety shoes.</li>
+      <li>No mobile phones or photography allowed.</li>
+      <li>Stay in pedestrian walkways.</li>
+      <li>Follow signs and staff directions.</li>
+      <li>In emergency, follow exit signs and alarms.</li>
+    </ul>
+    <button class="btn" onclick="startQuiz()">Proceed to Quiz</button>
+  </div>
+
+  <div id="quiz" class="container hidden">
+    <h2>Safety Quiz</h2>
+    <form id="quizForm">
+      <div class="question">
+        <p>1. What should you wear inside the factory?</p>
+        <input type="radio" name="q1" value="a"> Helmet, vest, and safety shoes<br>
+        <input type="radio" name="q1" value="b"> Casual clothes<br>
+      </div>
+      <div class="question">
+        <p>2. Can you use your mobile phone in the factory?</p>
+        <input type="radio" name="q2" value="a"> Yes<br>
+        <input type="radio" name="q2" value="b"> No<br>
+      </div>
+      <div class="question">
+        <p>3. What should you do during an emergency?</p>
+        <input type="radio" name="q3" value="a"> Wait for someone to help<br>
+        <input type="radio" name="q3" value="b"> Follow exit signs and alarms<br>
+      </div>
+      <button class="btn" type="button" onclick="submitQuiz()">Submit Quiz</button>
+    </form>
+  </div>
+
+  <div id="result" class="container hidden">
+    <h2>Access Granted</h2>
+    <p>You passed the quiz. Show this QR code at the gate:</p>
+    <div id="qrcode"></div>
+  </div>
+
+  <div id="fail" class="container hidden">
+    <h2>Access Denied</h2>
+    <p>You did not pass the quiz. Please review the safety instructions again.</p>
+    <button class="btn" onclick="showInstructions()">Retry</button>
+  </div>
+
+  <script>
+    function showInstructions() {
+      document.getElementById("welcome").classList.add("hidden");
+      document.getElementById("fail").classList.add("hidden");
+      document.getElementById("instructions").classList.remove("hidden");
+    }
+
+    function startQuiz() {
+      document.getElementById("instructions").classList.add("hidden");
+      document.getElementById("quiz").classList.remove("hidden");
+    }
+
+    function submitQuiz() {
+      const answers = {
+        q1: "a",
+        q2: "b",
+        q3: "b"
+      };
+      const form = document.forms["quizForm"];
+      let score = 0;
+      for (let q in answers) {
+        if (form[q].value === answers[q]) score++;
+      }
+      document.getElementById("quiz").classList.add("hidden");
+      if (score >= 2) {
+        document.getElementById("result").classList.remove("hidden");
+        generateQRCode("Coca-Cola HBC Visitor Pass - Access Granted");
+      } else {
+        document.getElementById("fail").classList.remove("hidden");
+      }
+    }
+
+    function generateQRCode(text) {
+      QRCode.toCanvas(document.getElementById("qrcode"), text, function (error) {
+        if (error) console.error(error);
+      });
+    }
+  </script>
+</body>
+</html>
