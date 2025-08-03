@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Connection Test</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <button onclick="testConnection()">Test Firebase Connection</button>
+    <button onclick="testWrite()">Test Write Data</button>
+    <div id="results"></div>
+
+    <script>
+        function log(message) {
+            document.getElementById('results').innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+
+        function testConnection() {
+            log('Testing Firebase connection...');
+            
+            // Test if Firebase is initialized
+            if (typeof firebase !== 'undefined') {
+                log('✅ Firebase SDK loaded successfully');
+                
+                // Test database reference
+                try {
+                    const dbRef = firebase.database().ref();
+                    log('✅ Database reference created successfully');
+                    
+                    // Test connection
+                    dbRef.child('.info/connected').on('value', function(snapshot) {
+                        if (snapshot.val() === true) {
+                            log('✅ Connected to Firebase Realtime Database');
+                        } else {
+                            log('❌ Not connected to Firebase Realtime Database');
+                        }
+                    });
+                } catch (error) {
+                    log('❌ Error creating database reference: ' + error.message);
+                }
+            } else {
+                log('❌ Firebase SDK not loaded');
+            }
+        }
+
+        function testWrite() {
+            log('Testing write operation...');
+            
+            const testData = {
+                test: true,
+                timestamp: new Date().toISOString(),
+                message: 'Test data from firebase-test.html'
+            };
+
+            const testRef = firebase.database().ref('test').push();
+            
+            testRef.set(testData)
+                .then(() => {
+                    log('✅ Test data written successfully with ID: ' + testRef.key);
+                })
+                .catch((error) => {
+                    log('❌ Error writing test data: ' + error.message);
+                    log('Error code: ' + error.code);
+                    
+                    // Common Firebase errors and solutions
+                    if (error.code === 'PERMISSION_DENIED') {
+                        log('💡 Solution: Check your Firebase Database Rules');
+                        log('💡 Go to Firebase Console > Realtime Database > Rules');
+                        log('💡 For testing, you can use: {"rules": {".read": true, ".write": true}}');
+                    }
+                });
+        }
+
+        // Auto-test connection on page load
+        window.onload = function() {
+            testConnection();
+        };
+    </script>
+</body>
+</html>

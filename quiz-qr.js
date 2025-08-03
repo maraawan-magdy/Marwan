@@ -2,8 +2,24 @@
 // Requires: https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js, https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js, firebase-config.js, qrcode.min.js
 
 function generateQRCodeOnThankYou() {
-  const canvas = document.getElementById('thankyou-qr-canvas');
-  if (window.QRCode) {
+  // Try to find the visible canvas
+  const resultCanvas = document.getElementById("result-qrcanvas");
+  const rule11Canvas = document.getElementById("rule11-qrcanvas");
+  
+  // Check which canvas is in a visible container
+  let canvas = null;
+  if (resultCanvas && resultCanvas.closest('.container:not(.hidden)')) {
+    canvas = resultCanvas;
+  } else if (rule11Canvas && rule11Canvas.closest('.container:not(.hidden)')) {
+    canvas = rule11Canvas;
+  }
+  
+  if (!canvas) {
+    // Fallback to the old ID if neither new ID is found
+    canvas = document.getElementById('thankyou-qr-canvas');
+  }
+  
+  if (window.QRCode && canvas) {
     // You can replace this with dynamic user info if needed
     const qrText = 'Coca-Cola HBC Visitor Pass';
     QRCode.toCanvas(canvas, qrText, { width: 200 }, function (error) {
@@ -29,10 +45,21 @@ function saveQuizTakerInfo(personalInfo, score, callback) {
 
 function generateQRCode(id, elementId) {
   const url = window.location.origin + '/display-info.html?id=' + encodeURIComponent(id);
-  QRCode.toCanvas(document.getElementById(elementId), url, { width: 200 }, function (error) {
-    if (error) console.error(error);
-  });
-  document.getElementById(elementId + '-link').innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+  const canvas = document.getElementById(elementId);
+  
+  if (canvas) {
+    QRCode.toCanvas(canvas, url, { width: 200 }, function (error) {
+      if (error) console.error(error);
+    });
+    
+    // Update the link if it exists
+    const linkElement = document.getElementById(elementId + '-link');
+    if (linkElement) {
+      linkElement.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+    }
+  } else {
+    console.error(`Canvas element with ID '${elementId}' not found.`);
+  }
 }
 
 // Example usage after quiz is completed:

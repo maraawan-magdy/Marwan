@@ -3,39 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Taker Info</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="firebase-config.js"></script>
+  <title>Visitor Information - Coca-Cola HBC</title>
+  <meta name="theme-color" content="#e4002b">
+  <link rel="stylesheet" href="../style.css"> <!-- Changed path to ../style.css -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    .info-box { border: 1px solid #ccc; padding: 1em; border-radius: 8px; max-width: 400px; }
+    /* Specific styles for display-info.html if needed, otherwise style.css will apply */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: var(--bg-light);
+    }
+    .info-container {
+      max-width: 500px;
+      width: 90%;
+      background: var(--bg-accent);
+      border-radius: var(--border-radius-lg);
+      padding: 30px 20px;
+      box-shadow: var(--shadow-medium);
+      text-align: center;
+      margin: 30px auto;
+    }
+    @media (max-width: 600px) {
+      .info-container {
+        padding: 15px 10px;
+        margin: 15px auto;
+      }
+      .info-item {
+        font-size: 0.95rem;
+      }
+      .info-item strong {
+        min-width: 90px;
+      }
+      .navbar {
+        flex-direction: column;
+        padding: 10px;
+      }
+      .nav-links {
+        margin: 10px 0;
+      }
+    }
+    .info-container h1 {
+      color: var(--primary);
+      margin-bottom: 30px;
+    }
+    .info-item {
+      text-align: left;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+    }
+    .info-item strong {
+      color: var(--primary-dark);
+      display: inline-block;
+      min-width: 120px; /* Align labels */
+    }
+    .status-message {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 20px;
+      color: var(--text-medium);
+    }
+    .status-message.error {
+      color: var(--primary); /* Red for error */
+    }
+    .print-btn {
+      background: #0077cc;
+    }
+    .close-btn {
+      background: var(--primary);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
   </style>
 </head>
 <body>
-  <h2>Quiz Taker Information</h2>
-  <div id="info" class="info-box">Loading...</div>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="../Logo1.png" alt="Coca-Cola Logo" class="logo-main">
+      </div>
+      <div class="nav-links">
+        <a href="../" class="nav-link">Home</a>
+      </div>
+      <div class="navbar-right">
+        <img src="../Logo2.png" alt="Logo Top Right" class="logo-top-right">
+      </div>
+    </nav>
+  </header>
+  <div class="info-container">
+    <h1>Visitor Information</h1>
+    <div id="visitor-details">
+      <p class="status-message">Loading visitor data...</p>
+    </div>
+    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+      <button class="btn print-btn" onclick="window.print()">Print Info</button>
+      <button class="btn close-btn" onclick="window.close()">Close Window</button>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 Coca-Cola HBC Egypt. All rights reserved. | Safety First
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="../firebase-config.js"></script> <!-- NEW: Include firebase-config.js -->
   <script>
-    function getIdFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('id');
-    }
-    const id = getIdFromUrl();
-    if (!id) {
-      document.getElementById('info').textContent = 'No ID provided.';
-    } else {
-      firebase.database().ref('quiz-takers/' + id).once('value').then(function(snapshot) {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          document.getElementById('info').innerHTML =
-            `<b>Name:</b> ${data.name || ''}<br>` +
-            `<b>Email:</b> ${data.email || ''}<br>` +
-            `<b>Score:</b> ${data.score || ''}`;
-        } else {
-          document.getElementById('info').textContent = 'No data found for this ID.';
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Loading visitor data...');
+      const urlParams = new URLSearchParams(window.location.search);
+      const visitorId = urlParams.get('id');
+      const visitorDetailsDiv = document.getElementById('visitor-details');
+
+      if (visitorId) {
+        // Ensure 'database' is initialized from firebase-config.js
+        if (typeof database === 'undefined') {
+            console.error("Firebase 'database' object is not defined. Check firebase-config.js.");
+            visitorDetailsDiv.innerHTML = '<p class="status-message error">Firebase not configured. Cannot load data.</p>';
+            return;
         }
-      });
-    }
+
+        const dbRef = database.ref('visitors/' + visitorId);
+          console.log('Attempting to fetch visitor data for ID:', visitorId);
+          console.log('Fetching from Firebase path:', 'visitors/' + visitorId);
+          console.log('Fetching from Firebase path:', 'visitors/' + visitorId);
+      dbRef.once('value')
+            .then(snapshot => {
+              const data = snapshot.val();
+              console.log('Received data:', data);
+              if (data) {
+                visitorDetailsDiv.innerHTML = `
+                  <div class="info-item"><strong>Full Name:</strong> ${data.fullname || 'Not provided'}</div>
+                  <div class="info-item"><strong>National ID:</strong> ${data.nationalid || 'Not provided'}</div>
+                  <div class="info-item"><strong>Email:</strong> ${data.email || 'Not provided'}</div>
+                  <div class="info-item"><strong>Phone:</strong> ${data.phone ? data.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') : 'Not provided'}</div>
+                  <div class="info-item"><strong>Blood Type:</strong> ${data.bloodtype || 'Not provided'}</div>
+                  <div class="info-item"><strong>Visit Date:</strong> ${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Not recorded'}</div>
+                  <p class="status-message" style="color: green;">Data loaded successfully.</p>
+                `;
+            } else {
+              visitorDetailsDiv.innerHTML = '<p class="status-message error">Visitor not found or data incomplete.</p>';
+            }
+          })
+          .catch(error => {
+            console.error("Error fetching visitor data:", error);
+            visitorDetailsDiv.innerHTML = '<p class="status-message error">Error loading data. Please try again later.</p>';
+          });
+      } else {
+        visitorDetailsDiv.innerHTML = '<p class="status-message error">No visitor ID provided in the URL.</p>';
+      }
+    });
   </script>
 </body>
 </html>

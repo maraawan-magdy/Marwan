@@ -11,11 +11,7 @@
   <script src="https://unpkg.com/scrollreveal"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <!-- Remove these temporarily to test basic page loading -->
-<!-- Load jQuery only if needed -->
-  <script>
-    window.jQuery || document.write('<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"><\/script>')
-  </script>
+  <script src="firebase-config.js"></script> <!-- NEW: Firebase config -->
 </head>
 <body>
   <header>
@@ -67,7 +63,9 @@
             <option value="O+">O+</option>
             <option value="O-">O-</option>
           </select><br>
-          <button class="btn" type="button" onclick="showInstructions()">Next</button>
+         
+          <button class="btn" type="button" onclick="handleVisitorRegistration()">Next</button>
+
         </form>
       </div>
   
@@ -288,22 +286,30 @@
         <div class="rule-page container" id="rule11">
           <h2>Thank you for completing the Safety Briefing!</h2>
           <p>Your QR code is below. Please show this at the entrance.</p>
-          <img src="QR.jpg" alt="QR Code Icon" class="qr-icon">
+          <div id="qrcode">
+            <canvas id="rule11-qrcanvas" style="border: 2px solid #e4002b; margin: 20px auto; background: white;"></canvas>
+          </div>
           <button class="btn" onclick="downloadQRCode()">Download QR Code</button>
         </div>
+      </div>
+
+      <div id="fail" class="container hidden" data-page="fail">
+        <h2>Access Denied</h2>
+        <p>You did not pass the quiz. Please review the safety rules and try again.</p>
+        <button class="btn" onclick="startRulesQuestions()">Retry Quiz</button>
       </div>
 
       <div id="result" class="container hidden" data-page="result">
         <h2>Access Granted</h2>
         <p>You passed the quiz. Please present this QR code to security:</p>
-        <div id="qrcode"><canvas id="qrcanvas"></canvas></div>
+        <div id="qrcode">
+          <canvas id="result-qrcanvas" style="border: 2px solid #e4002b; margin: 20px auto; background: white;"></canvas>
+        </div>
+        <button class="btn" onclick="downloadQRCode()">Download QR Code</button>
+        <p style="margin-top: 20px; font-size: 14px; color: #666;">Scan this QR code to view your visitor information</p>
       </div>
-
-      <div id="fail" class="container hidden" data-page="fail">
-        <h2>Access Denied</h2>
-        <p>You did not pass the quiz. Please review the safety instructions again.</p>
-        <button class="btn" onclick="showInstructions()">Retry</button>
-      </div>
+       
+      
   </main>
 
   <footer>
