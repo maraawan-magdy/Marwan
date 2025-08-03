@@ -253,7 +253,9 @@ function displayCurrentRuleOrQuestion() {
       // Generate QR code for rule11
       if (currentPageData.id === 'rule11') {
         if (currentVisitorId) {
-          generateQRCode(`display-info.html?id=${currentVisitorId}`, 'rule11-qrcanvas');
+          // Use the full URL for the hosted page
+          const fullURL = `${window.location.origin}${window.location.pathname.replace('index.html', '')}display-info.html?id=${currentVisitorId}`;
+          generateQRCode(fullURL, 'rule11-qrcanvas');
         } else {
           console.error("No visitor ID found for QR code generation.");
           generateQRCode("Error: Visitor ID missing.", 'rule11-qrcanvas');
@@ -310,7 +312,9 @@ function endQuiz() {
   if (correctAnswersCount >= 8) { // Assuming 80% pass rate for 10 questions
     showPage('result'); // Always show the result page if passed
     if (currentVisitorId) {
-      generateQRCode(`display-info.html?id=${currentVisitorId}`, 'result-qrcanvas'); // Generate QR on result-qrcanvas
+      // Use the full URL for the hosted page
+      const fullURL = `${window.location.origin}${window.location.pathname.replace('index.html', '')}display-info.html?id=${currentVisitorId}`;
+      generateQRCode(fullURL, 'result-qrcanvas'); // Generate QR on result-qrcanvas
     } else {
       console.error("No visitor ID found for QR code generation.");
       generateQRCode("Error: Visitor ID missing.", 'result-qrcanvas'); // Fallback QR code
