@@ -71,11 +71,11 @@
   
       <div id="instructions" class="container hidden" data-page="instructions">
         <h2>Safety Moment</h2>
-        <video controls class="instruction-video">
+        <video id="safety-video" class="instruction-video" preload="auto" controls>
           <source src="Video.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <button class="btn" onclick="startRulesQuestions()">Next</button>
+        <button class="btn" id="next-btn" onclick="startRulesQuestions()" disabled style="opacity: 0.5;">Next</button>
       </div>
   
       <div id="rule-section" class="hidden" data-page="rule-section">

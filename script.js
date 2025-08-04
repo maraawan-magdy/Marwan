@@ -98,6 +98,29 @@ window.addEventListener('DOMContentLoaded', function () {
       l.classList.toggle('active', l.getAttribute('data-section') === current);
     });
   });
+  
+  // Add event listener to automatically proceed when safety video ends
+  const safetyVideo = document.getElementById('safety-video');
+  if (safetyVideo) {
+    let lastTime = 0;
+    safetyVideo.addEventListener('timeupdate', function() {
+      if (safetyVideo.currentTime < lastTime) {
+        safetyVideo.currentTime = lastTime;
+      } else {
+        lastTime = safetyVideo.currentTime;
+      }
+    });
+    safetyVideo.addEventListener('ended', function() {
+      // Set the video watched flag
+      videoWatched = true;
+      // Enable the next button
+      const nextButton = document.querySelector('#next-btn');
+      if (nextButton) {
+        nextButton.disabled = false;
+        nextButton.style.opacity = '1';
+      }
+    });
+  }
 });
 
 function showVisitorForm() {
@@ -213,11 +236,28 @@ function registerVisitor() {
 }
 
 // ... (rest of your script.js code, including showInstructions, etc.) ...
+// Add a flag to track if the video has been watched
+let videoWatched = false;
+
 function showInstructions() {
   showPage('instructions');
+  // Reset the video watched flag when showing the instructions page
+  videoWatched = false;
+  // Disable the next button
+  const nextButton = document.querySelector('#instructions .btn');
+  if (nextButton) {
+    nextButton.disabled = true;
+    nextButton.style.opacity = '0.5';
+  }
 }
 
 function startRulesQuestions() {
+  // Only proceed if the video has been watched or if we're bypassing this check for testing
+  if (!videoWatched) {
+    alert("Please watch the safety video before proceeding.");
+    return;
+  }
+  
   correctAnswersCount = 0; // Reset score
   currentRuleIndex = 0; // Start from the beginning
   showPage('rule-section'); // Show the container for rules/questions
