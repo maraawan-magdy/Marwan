@@ -8,76 +8,196 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Specific styles for display-info.html if needed, otherwise style.css will apply */
+    /* Enhanced styles for display-info.html */
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
-      background: var(--bg-light);
+      display: flex;
+      flex-direction: column;
     }
+    
     .info-container {
-      max-width: 500px;
-      width: 90%;
-      background: var(--bg-accent);
-      border-radius: var(--border-radius-lg);
-      padding: 30px 20px;
-      box-shadow: var(--shadow-medium);
+      max-width: 600px;
+      width: 95%;
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin: 50px auto;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .header-section {
       text-align: center;
-      margin: 30px auto;
-    }
-    @media (max-width: 600px) {
-      .info-container {
-        padding: 15px 10px;
-        margin: 15px auto;
-      }
-      .info-item {
-        font-size: 0.95rem;
-      }
-      .info-item strong {
-        min-width: 90px;
-      }
-      .navbar {
-        flex-direction: column;
-        padding: 10px;
-      }
-      .nav-links {
-        margin: 10px 0;
-      }
-    }
-    .info-container h1 {
-      color: var(--primary);
       margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e4002b;
     }
-    .info-item {
-      text-align: left;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-      color: var(--text-dark);
-    }
-    .info-item strong {
-      color: var(--primary-dark);
-      display: inline-block;
-      min-width: 120px; /* Align labels */
-    }
-    .status-message {
-      font-size: 1.2rem;
+    
+    .header-section h1 {
+      color: #e4002b;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
       font-weight: 700;
-      margin-top: 20px;
-      color: var(--text-medium);
     }
-    .status-message.error {
-      color: var(--primary); /* Red for error */
+    
+    .header-section .subtitle {
+      color: #666;
+      font-size: 1.1rem;
     }
-    .print-btn {
+    
+    .visitor-card {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-left: 5px solid #e4002b;
+    }
+    
+    .visitor-info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      font-weight: 700;
+      color: #e4002b;
+      min-width: 120px;
+      margin-right: 15px;
+    }
+    
+    .info-value {
+      color: #333;
+      font-size: 1.1rem;
+    }
+    
+    .status-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-print {
       background: #0077cc;
+      color: white;
     }
-    .close-btn {
-      background: var(--primary);
+    
+    .btn-close {
+      background: #e4002b;
+      color: white;
     }
+    
+    .btn-home {
+      background: #28a745;
+      color: white;
+    }
+    
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #e4002b;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .qr-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .qr-code {
+      border: 2px solid #e4002b;
+      border-radius: 10px;
+      padding: 10px;
+      background: white;
+      display: inline-block;
+    }
+    
+    @media (max-width: 600px) {
+      .info-container {
+        padding: 25px 20px;
+        margin: 20px auto;
+      }
+      
+      .header-section h1 {
+        font-size: 1.8rem;
+      }
+      
+      .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .info-label {
+        margin-bottom: 5px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
@@ -95,66 +215,137 @@
       </div>
     </nav>
   </header>
-  <div class="info-container">
-    <h1>Visitor Information</h1>
-    <div id="visitor-details">
-      <p class="status-message">Loading visitor data...</p>
+
+  <main>
+    <div class="info-container">
+      <div class="header-section">
+        <h1>Visitor Information</h1>
+        <p class="subtitle">Coca-Cola HBC Egypt - Safety Briefing</p>
+      </div>
+
+      <div id="visitor-details">
+        <div class="loading-spinner"></div>
+        <p class="status-message">Loading visitor data...</p>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-print" onclick="window.print()">
+          <span>🖨️ Print Info</span>
+        </button>
+        <button class="btn btn-close" onclick="window.close()">
+          <span>❌ Close Window</span>
+        </button>
+        <a href="../" class="btn btn-home">
+          <span>🏠 Back to Home</span>
+        </a>
+      </div>
     </div>
-    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-      <button class="btn print-btn" onclick="window.print()">Print Info</button>
-      <button class="btn close-btn" onclick="window.close()">Close Window</button>
-    </div>
-  </div>
+  </main>
+
   <footer>
-    &copy; 2025 Coca-Cola HBC Egypt. All rights reserved. | Safety First
+    <div style="text-align: center; padding: 20px; color: #666;">
+      &copy; 2025 Coca-Cola HBC Egypt. All rights reserved. | Safety First
+    </div>
   </footer>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="firebase-config.js"></script> <!-- NEW: Include firebase-config.js -->
+  <script src="firebase-config.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('Loading visitor data...');
       const urlParams = new URLSearchParams(window.location.search);
       const visitorId = urlParams.get('id');
       const visitorDetailsDiv = document.getElementById('visitor-details');
 
       if (visitorId) {
-        // Ensure 'database' is initialized from firebase-config.js
         if (typeof database === 'undefined') {
-            console.error("Firebase 'database' object is not defined. Check firebase-config.js.");
-            visitorDetailsDiv.innerHTML = '<p class="status-message error">Firebase not configured. Cannot load data.</p>';
-            return;
+          visitorDetailsDiv.innerHTML = `
+            <div class="status-section">
+              <span class="status-badge status-error">Configuration Error</span>
+              <p>Firebase database not initialized. Please refresh and try again.</p>
+            </div>
+          `;
+          return;
         }
 
         const dbRef = database.ref('visitors/' + visitorId);
-          console.log('Attempting to fetch visitor data for ID:', visitorId);
-          console.log('Fetching from Firebase path:', 'visitors/' + visitorId);
-          console.log('Fetching from Firebase path:', 'visitors/' + visitorId);
-      dbRef.once('value')
-            .then(snapshot => {
-              const data = snapshot.val();
-              console.log('Received data:', data);
-              if (data) {
-                visitorDetailsDiv.innerHTML = `
-                  <div class="info-item"><strong>Full Name:</strong> ${data.fullname || 'Not provided'}</div>
-                  <div class="info-item"><strong>National ID:</strong> ${data.nationalid || 'Not provided'}</div>
-                  <div class="info-item"><strong>Email:</strong> ${data.email || 'Not provided'}</div>
-                  <div class="info-item"><strong>Phone:</strong> ${data.phone ? data.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') : 'Not provided'}</div>
-                  <div class="info-item"><strong>Blood Type:</strong> ${data.bloodtype || 'Not provided'}</div>
-                  <div class="info-item"><strong>Visit Date:</strong> ${data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Not recorded'}</div>
-                  <p class="status-message" style="color: green;">Data loaded successfully.</p>
-                `;
+        
+        dbRef.once('value')
+          .then(snapshot => {
+            const data = snapshot.val();
+            if (data) {
+              const visitDate = data.timestamp ? new Date(data.timestamp) : new Date();
+              const formattedDate = visitDate.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+
+              visitorDetailsDiv.innerHTML = `
+                <div class="visitor-card">
+                  <div class="visitor-info-grid">
+                    <div class="info-item">
+                      <span class="info-label">Full Name:</span>
+                      <span class="info-value">${data.fullname || 'Not provided'}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">National ID:</span>
+                      <span class="info-value">${data.nationalid || 'Not provided'}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Email:</span>
+                      <span class="info-value">${data.email || 'Not provided'}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Phone:</span>
+                      <span class="info-value">${data.phone ? data.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') : 'Not provided'}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Blood Type:</span>
+                      <span class="info-value">${data.bloodtype || 'Not provided'}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Visit Date:</span>
+                      <span class="info-value">${formattedDate}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">Visitor ID:</span>
+                      <span class="info-value">${visitorId}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="status-section">
+                  <span class="status-badge status-success">✅ Data Loaded Successfully</span>
+                </div>
+              `;
             } else {
-              visitorDetailsDiv.innerHTML = '<p class="status-message error">Visitor not found or data incomplete.</p>';
+              visitorDetailsDiv.innerHTML = `
+                <div class="status-section">
+                  <span class="status-badge status-error">❌ Visitor Not Found</span>
+                  <p>The visitor information could not be found or is incomplete.</p>
+                </div>
+              `;
             }
           })
           .catch(error => {
             console.error("Error fetching visitor data:", error);
-            visitorDetailsDiv.innerHTML = '<p class="status-message error">Error loading data. Please try again later.</p>';
+            visitorDetailsDiv.innerHTML = `
+              <div class="status-section">
+                <span class="status-badge status-error">❌ Error Loading Data</span>
+                <p>Unable to load visitor information. Please try again later.</p>
+              </div>
+            `;
           });
       } else {
-        visitorDetailsDiv.innerHTML = '<p class="status-message error">No visitor ID provided in the URL.</p>';
+        visitorDetailsDiv.innerHTML = `
+          <div class="status-section">
+            <span class="status-badge status-error">❌ No Visitor ID</span>
+            <p>No visitor ID was provided in the URL.</p>
+          </div>
+        `;
       }
     });
   </script>
